@@ -3,6 +3,16 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <h2>Node Static Resources!</h2>
+    <div id="root"></div>
+    <script type="module">
+      import { refreshShopList, bindShopInfoEvents } from './index.js';
+
+      async function bootstrap() {
+        await refreshShopList();
+        await bindShopInfoEvents();
+      }
+
+      bootstrap();
+    </script>
   </body>
 </html>
