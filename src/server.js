@@ -19,6 +19,7 @@ async function bootstrap() {
   server.use(express.json()); // for parsing application/json
   server.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
   server.use(await initControllers());
+  server.use(errorHandler);
 
   // 启动
   await promisify(server.listen.bind(server, port))();
@@ -30,5 +31,18 @@ process.on('unhandledRejection', (err) => {
   console.error(err);
   process.exit(1);
 });
+
+function errorHandler(err, req, res, next) {
+  if (res.headersSent) {
+    // 如果是在返回响应结果时发生了异常，交给 express 内置的 finalhandler 关闭链接
+    return next(err);
+  }
+
+  // 打印异常
+  console.error(err);
+
+  // 重定向到异常指引页面
+  res.redirect('/500.html');
+}
 
 bootstrap();
