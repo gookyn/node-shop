@@ -1,6 +1,7 @@
 const express = require('express');
 const { resolve } = require('path');
 const { promisify } = require('util');
+const initMiddlewares = require('./middlewares');
 const initControllers = require('./controllers');
 
 const server = express();
@@ -13,7 +14,8 @@ async function bootstrap() {
   server.use(express.static(publicDir));
   server.use('/moulds', express.static(mouldsDir));
 
-  // 动态数据
+  // 动态处理
+  server.use(await initMiddlewares());
   server.use(await initControllers());
 
   // 启动
