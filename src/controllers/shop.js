@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const shopService = require('../services/shop');
 const { createShopFormSchema } = require('../moulds/ShopForm');
+const cc = require('../utils/cc');
 
 class ShopController {
   constructor() {
@@ -19,7 +20,7 @@ class ShopController {
     return router;
   }
 
-  getAll = async (req, res) => {
+  getAll = cc(async (req, res) => {
     const { pageIndex, pageSize } = req.query;
     const shopList = await this.shopService.find({ pageIndex, pageSize });
 
@@ -27,9 +28,9 @@ class ShopController {
       success: true,
       data: shopList,
     });
-  };
+  });
 
-  getOne = async (req, res) => {
+  getOne = cc(async (req, res) => {
     const { shopId } = req.params;
     const shopList = await this.shopService.find({ id, shopId });
 
@@ -44,9 +45,9 @@ class ShopController {
         data: null,
       });
     }
-  };
+  });
 
-  post = async (req, res) => {
+  post = cc(async (req, res) => {
     const { name } = req.body;
 
     try {
@@ -66,9 +67,9 @@ class ShopController {
       success: true,
       data: shopInfo,
     });
-  };
+  });
 
-  put = async (req, res) => {
+  put = cc(async (req, res) => {
     const { shopId } = req.params;
     const { name } = req.query;
 
@@ -99,9 +100,9 @@ class ShopController {
         data: null,
       });
     }
-  };
+  });
 
-  delete = async (req, res) => {
+  delete = cc(async (req, res) => {
     const { shopId } = req.params;
     const success = await this.shopService.remove({
       id: shopId,
@@ -114,7 +115,7 @@ class ShopController {
     res.send({
       success,
     });
-  };
+  });
 }
 
 module.exports = async () => {
