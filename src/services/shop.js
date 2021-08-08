@@ -28,6 +28,17 @@ class ShopService {
       .map((id) => ({ id, ...memoryStorage[id] }));
   }
 
+  async create({ values }) {
+    await delay();
+
+    const id = String(1 + Object.keys(memoryStorage).reduce((m, id) => Math.max(m, id), -Infinity));
+
+    return {
+      id,
+      ...(memoryStorage[id] = values),
+    };
+  }
+
   async modify({ id, values }) {
     await delay();
 

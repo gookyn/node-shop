@@ -16,13 +16,23 @@ export async function refreshShopList() {
   );
   document.querySelector('#root').innerHTML = `
     <h2>店铺列表：</h2>
-    <ul class="shop-list">${htmlItems.join('')}</ul>`;
+    <ul class="shop-list">${htmlItems.join('')}</ul>
+    <h2>店铺新增：</h2>
+    <form method="post" action="/api/shop">
+      <label>新店铺的名称：</label>
+      <input type="text" name="name" />
+      <button type="submit" data-type="create">确认新增</button>
+      <span class="error"></span>
+    </form>`;
 }
 
 export async function bindShopInfoEvents() {
   document.querySelector('#root').addEventListener('click', async (e) => {
     e.preventDefault();
     switch (e.target.dataset.type) {
+      case 'create':
+        await createShopInfo(e);
+        break;
       case 'modify':
         await modifyShopInfo(e);
         break;
@@ -31,6 +41,28 @@ export async function bindShopInfoEvents() {
         break;
     }
   });
+}
+
+export async function createShopInfo(e) {
+  e.preventDefault();
+  const name = e.target.parentElement.querySelector('input[name=name]').value;
+
+  try {
+    await createShopFormSchema().validate({ name });
+  } catch ({ message }) {
+    e.target.parentElement.querySelector('.error').innerHTML = message;
+    return;
+  }
+
+  await fetch('/api/shop', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `name=${encodeURIComponent(name)}`,
+  });
+
+  await refreshShopList();
 }
 
 export async function modifyShopInfo(e) {

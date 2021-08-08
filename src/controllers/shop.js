@@ -13,6 +13,7 @@ class ShopController {
     const router = Router();
     router.get('/', this.getAll);
     router.get('/:shopId', this.getOne);
+    router.post('/', this.post);
     router.put('/:shopId', this.put);
     router.delete('/:shopId', this.delete);
     return router;
@@ -43,6 +44,28 @@ class ShopController {
         data: null,
       });
     }
+  };
+
+  post = async (req, res) => {
+    const { name } = req.body;
+
+    try {
+      await createShopFormSchema().validate({ name });
+    } catch (e) {
+      res.status(400).send({
+        success: false,
+        message: e.message,
+      });
+    }
+
+    const shopInfo = await this.shopService.create({
+      values: { name },
+    });
+
+    res.send({
+      success: true,
+      data: shopInfo,
+    });
   };
 
   put = async (req, res) => {

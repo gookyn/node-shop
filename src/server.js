@@ -16,6 +16,8 @@ async function bootstrap() {
 
   // 动态处理
   server.use(await initMiddlewares());
+  server.use(express.json()); // for parsing application/json
+  server.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
   server.use(await initControllers());
 
   // 启动
