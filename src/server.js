@@ -10,12 +10,13 @@ const publicDir = resolve('public');
 const mouldsDir = resolve('src/moulds');
 
 async function bootstrap() {
+  server.use(await initMiddlewares());
+
   // 静态资源
   server.use(express.static(publicDir));
   server.use('/moulds', express.static(mouldsDir));
 
   // 动态处理
-  server.use(await initMiddlewares());
   server.use(express.json()); // for parsing application/json
   server.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
   server.use(await initControllers());

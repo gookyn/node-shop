@@ -8,7 +8,10 @@
     "build:yup": "rollup node_modules/yup -o src/moulds/yup.js -p @rollup/plugin-node-resolve,@rollup/plugin-commonjs,rollup-plugin-terser -f umd -n 'yup'"
   },
   "dependencies": {
+    "connect-session-sequelize": "^7.1.1",
+    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2",
     "yup": "^0.32.9"
